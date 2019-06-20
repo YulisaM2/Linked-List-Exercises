@@ -1,0 +1,62 @@
+/** Solution for the problem found here: https://leetcode.com/problems/swap-nodes-in-pairs/
+*
+* Given a linked list, swap every two adjacent nodes and return its head.
+* You may not modify the values in the list's nodes, only nodes itself may be changed.
+**/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+    // If list consists of none or one node, no need for swaping
+        if(head == NULL || head->next == NULL){
+            return head;
+        }
+        
+        ListNode *a,*b, *c;
+        a = head;
+        b = a->next;
+        c = b->next;
+        
+        
+        // First swap, special case as we need to redefine head as the b pointer (which is the new start node)
+        b->next = a;
+        a->next = c;
+        head = b;
+               
+        // If in first swap c is NULL, we have reached the end of the list
+        if(c == NULL){
+            return head;
+        }
+        
+        // Reorganize pointers so that pointers follow a b c order for 
+        b = c;
+        c = c->next;
+        
+        while(c != NULL){
+            a->next = c;
+            b->next = c->next;
+            c->next = b;
+            
+            if(b->next != NULL){
+                a = b;
+                b = b->next;
+                c = b->next;
+            }else{
+                return head;
+            }
+            
+            
+        }
+        
+        return head;
+        
+    }
+};
