@@ -1,0 +1,73 @@
+/** Solution to the problem found here: 
+* 
+* Given a linked list, remove the n-th node from the end of list and return its head.
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+
+// Case 1                            n = 1
+// Case 1 -> 2                       n = 1,2
+// Case 1 -> 2 -> 3                  n = 1,2,3
+// Caso 1 -> 2 -> 3 -> 4             n = 1,2,3,4
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // If you only have one node, and n will always be valid, then you should return NULL
+        if(head->next == NULL){
+            return NULL;
+        }
+        
+        
+        // Special case only two nodes in list
+        // Must be checked separately as we would not need the tail pointer that will help us reach the end of the list and connect nodes when erasing middle ones
+        ListNode* base, *mid, *tail;
+        base = head;
+        mid = base->next;
+        
+        if(mid->next == NULL){
+            if(n == 1){
+                base->next = NULL;
+                return base;
+            }else{
+                head = mid;
+                return head;
+            }
+        }
+        
+        
+        tail = mid->next;
+        // As we cycle through, to only iterate through the list once we need to mantain n distance between end (pointed by tail) and our current position (mid)
+        // Base is needed in case we eliminate a middle node
+        int posMid = 2, posTail = 3;
+        
+        while(tail != NULL){
+            if(posTail - posMid == n){
+                mid = mid->next;
+                ++posMid;
+                base = base->next;
+            }
+            
+            tail = tail->next;
+            ++posTail;
+        }
+        // If end is reached we need to know if distance between mid and tail is n, otherwise it means that base is the one at n distanec from tail
+        // Then we take proper actions updating either next node of base or the list's head
+        if(posTail - posMid == n){
+             base->next = mid->next;   
+        }else{
+            head = mid;
+        }
+       
+        return head;
+        
+    }
+};
