@@ -1,0 +1,52 @@
+/** Solution to the problem found here: https://leetcode.com/problems/swap-nodes-in-pairs/
+*
+* Given a linked list, swap every two adjacent nodes and return its head.
+* You may not modify the values in the list's nodes, only nodes itself may be changed.
+**/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+class Solution {
+public:
+    
+    ListNode* swapN(ListNode* curr){
+        // First, check that you do have a pair of nodes to swap by curr not being null or not being next a null
+        // If you have even number of nodes, when you are finished your tail will be null
+        // If you have odd number of nodes, when you are finished your tail will not be null but the next node will be 
+       if(curr == NULL){
+           return NULL;
+       }else if(curr->next == NULL){
+           return curr;
+       }
+        
+        // The next node (starting node being curr) is currB
+        // The reason we use 3 pointers is that in order to swap we need 2 basic nodes and one so that when curr takes the place of currB, it can point to the currect next node (otherwise connection would be lost)
+    
+        ListNode* currB = curr->next;
+        ListNode* tail = currB->next;
+        
+        // Swap 
+        currB->next = curr;
+        curr->next = tail;
+        
+        // Repeat, pass the tail because curr and currB have already been switched
+        curr->next = swapN(tail);
+        return currB;
+    }
+    
+    ListNode* swapPairs(ListNode* head) {
+        
+        ListNode * finalH = swapN(head);
+        
+        ListNode* print = head;
+        return finalH;
+    
+    }
+};
