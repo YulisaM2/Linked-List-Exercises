@@ -1,0 +1,93 @@
+/** Solution to the problem found here: 
+* 
+* Merge two sorted linked lists and return it as a new list. 
+* The new list should be made by splicing together the nodes of the first two lists.
+**/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+
+//Case A empty
+//Case B empty
+//Case 2 both are empty
+//Case A y B have content (actually 2 different cases: same length or different lengths)
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        
+        // Dealing with empty lists
+        if(l1 == NULL && l2 == NULL){
+            return NULL;
+        }
+        
+        // Case A empty
+        if(l1 == NULL){
+            return l2;
+        }
+        
+        // Caso B Vacio
+        if(l2 == NULL){
+            return l1;
+        }
+        
+        // Case A y B with content
+        ListNode* a,*b, *result;
+        a = l1;
+        b = l2;
+        
+        if(a->val <= b->val){
+            result = new ListNode(a->val);
+            a = a->next;
+        }else{
+            result = new ListNode(b->val);
+            b = b->next;
+        }
+        // Have a separate pointer that would return the head of the resulting list
+        ListNode* finalList = result;
+        
+    
+        // Iterate through the lists untill you reach the end of either one (might have different lengths)
+        while(a != NULL && b != NULL){
+            if(a->val <= b->val){   
+                result->next = new ListNode(a->val);
+                a = a->next;
+            }else{
+                result->next = new ListNode(b->val);
+                b = b->next;
+            }
+            
+            result = result->next;
+        }
+        
+        // If both pointers are not NULL, then one list has not been completely analyzed
+        if(a == NULL && b == NULL){
+            return finalList;
+        }
+        
+        // Iterate through the one that has not been completely analyzed in one go (already organized)
+        if(a == NULL){
+            while(b != NULL){
+                result->next = new ListNode(b->val);
+                b = b->next;
+                result = result->next;
+            }
+        }else{
+            while(a != NULL){
+                result->next = new ListNode(a->val);
+                a = a->next;
+                result = result->next;
+            }
+        }
+        
+        return finalList;
+        
+    }  
+};
